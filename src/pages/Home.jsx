@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("default"); // 🆕 sorting state
   const { addToCart } = useContext(CartContext);
 
   // 🔹 Fetch products from backend
@@ -27,6 +28,13 @@ const Home = () => {
 
     fetchProducts();
   }, []);
+
+  // 🧮 Sort products based on selected order
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortOrder === "highToLow") return b.price - a.price;
+    if (sortOrder === "lowToHigh") return a.price - b.price;
+    return 0; // default - no sorting
+  });
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -46,16 +54,29 @@ const Home = () => {
 
       {/* Products */}
       <section className="products-section">
-        <h2 className="products-heading">Our Products</h2>
+        <div className="products-header">
+          <h2 className="products-heading">Our Products</h2>
+
+          {/* 🆕 Sort Dropdown */}
+          <select
+            className="sort-dropdown"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="default">Sort By</option>
+            <option value="highToLow">Price: High to Low</option>
+            <option value="lowToHigh">Price: Low to High</option>
+          </select>
+        </div>
 
         {loading ? (
           <p>Loading products...</p>
         ) : (
           <div className="products-grid">
-            {products.length > 0 ? (
-              products.map((p) => (
+            {sortedProducts.length > 0 ? (
+              sortedProducts.map((p) => (
                 <ProductCard
-                  key={p.id} // ✅ fixed
+                  key={p.id}
                   product={p}
                   onAddToCart={() => handleAddToCart(p)}
                 />
