@@ -183,3 +183,22 @@
 .kids-img:hover {
   transform: scale(1.02);
 }
+.category-products {
+  margin-top: 2rem;
+}
+
+.sort-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.sort-dropdown {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+}
