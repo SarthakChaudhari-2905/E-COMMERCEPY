@@ -115,3 +115,35 @@ def get_products(request):
 
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
+from .models import Wishlist
+from .serializers import WishlistSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+# ------------------ ADD TO WISHLIST ------------------
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_wishlist(request):
+    product_id = request.data.get('product')
+    if not product_id:
+        return Response({"msg": "Product ID is required"}, status=400)
+
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return Response({"msg": "Product not found"}, status=404)
+
+    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+
+    if created:
+        return Response({"msg": "Product added to wishlist"}, status=201)
+    else:
+        return Response({"msg": "Product already in wishlist"}, status=200)
+
+# ------------------ VIEW USER WISHLIST ------------------
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_wishlist(request):
+    wishlist = Wishlist.objects.filter(user=request.user)
+    serializer = WishlistSerializer(wishlist, many=True)
+    return Response(serializer.data)
