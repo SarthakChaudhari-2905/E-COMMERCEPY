@@ -32,3 +32,16 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name} ({self.quantity})"
+from django.db import models
+from .models import Product, User  # assuming User is your custom user model
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wishlist_items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')  # prevent duplicates
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name}"
