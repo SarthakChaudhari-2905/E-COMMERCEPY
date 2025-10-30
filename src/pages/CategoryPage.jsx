@@ -8,6 +8,7 @@ const CategoryPage = () => {
   const { category } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("default"); // 🆕 sort state
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
@@ -24,15 +25,20 @@ const CategoryPage = () => {
     fetchCategoryProducts();
   }, [category]);
 
+  // 🧮 Sort products based on selected order
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortOrder === "highToLow") return b.price - a.price;
+    if (sortOrder === "lowToHigh") return a.price - b.price;
+    return 0; // default - no sorting
+  });
+
   return (
     <div className="category-container">
       <h2 className="category-title">{category} Collection</h2>
 
-  
       {/* --- MEN SECTION --- */}
       {category === "men" && (
         <>
-          {/* Existing Men video */}
           <div className="video-container">
             <video
               className="category-video"
@@ -47,7 +53,6 @@ const CategoryPage = () => {
             />
           </div>
 
-          {/* New Men two-image layout */}
           <div className="category-banner">
             <div className="category-block">
               <h3 className="category-heading">NEW ARRIVALS</h3>
@@ -70,96 +75,107 @@ const CategoryPage = () => {
         </>
       )}
 
-   {category === "ladies" && (
-  <>
-    {/* Keep the original full image */}
-    <div className="video-container">
-      <img
-        className="category-video"
-        src="https://image.hm.com/content/dam/global_campaigns/season_02/women/startpage-category-entries/wk39/WS42C-16x9-women-startpage-wk39-Option.jpg?imwidth=2560"
-        alt="Ladies Collection"
-      />
-    </div>
+      {/* --- LADIES SECTION --- */}
+      {category === "ladies" && (
+        <>
+          <div className="video-container">
+            <img
+              className="category-video"
+              src="https://image.hm.com/content/dam/global_campaigns/season_02/women/startpage-category-entries/wk39/WS42C-16x9-women-startpage-wk39-Option.jpg?imwidth=2560"
+              alt="Ladies Collection"
+            />
+          </div>
 
-    {/* Add new two-image banner below */}
-    <div className="ladies-banner">
-      {/* Left image with title above */}
-      <div className="ladies-block">
-        <h3 className="ladies-heading">NEW ARRIVALS</h3>
-        <img
-          src="https://image.hm.com/content/dam/global_campaigns/season_02/women/startpage-category-entries/wk41/2042-4x5-NEW-women-startpage-wk41.jpg?imwidth=1366"
-          alt="New Arrivals"
-          className="ladies-img"
-        />
-      </div>
+          <div className="ladies-banner">
+            <div className="ladies-block">
+              <h3 className="ladies-heading">NEW ARRIVALS</h3>
+              <img
+                src="https://image.hm.com/content/dam/global_campaigns/season_02/women/startpage-category-entries/wk41/2042-4x5-NEW-women-startpage-wk41.jpg?imwidth=1366"
+                alt="New Arrivals"
+                className="ladies-img"
+              />
+            </div>
 
-      {/* Right image with title above */}
-      <div className="ladies-block">
-        <h3 className="ladies-heading link">SHOP NOW</h3>
-        <img
-          src="https://image.hm.com/content/dam/global_campaigns/season_02/women/startpage-category-entries/wk41/1022B-4x5-women-startpage-wk42.jpg?imwidth=1366"
-          alt="Shop Now"
-          className="ladies-img"
-        />
-      </div>
-    </div>
-  </>
-)}
+            <div className="ladies-block">
+              <h3 className="ladies-heading link">SHOP NOW</h3>
+              <img
+                src="https://image.hm.com/content/dam/global_campaigns/season_02/women/startpage-category-entries/wk41/1022B-4x5-women-startpage-wk42.jpg?imwidth=1366"
+                alt="Shop Now"
+                className="ladies-img"
+              />
+            </div>
+          </div>
+        </>
+      )}
 
-    {/* --- KIDS SECTION --- */}
-{category === "kids" && (
-  <>
-    {/* Keep existing kids video */}
-    <div className="video-container">
-      <video
-        className="category-video"
-        src="https://image.hm.com/content/dam/global_campaigns/season_02/kids/start-page-assets/w39-40/KS42B1-2x3-kids-start-page-VIDEO-wk39-40.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        controls={false}
-        disablePictureInPicture
-        controlsList="nodownload noremoteplayback noplaybackrate"
-      />
-    </div>
+      {/* --- KIDS SECTION --- */}
+      {category === "kids" && (
+        <>
+          <div className="video-container">
+            <video
+              className="category-video"
+              src="https://image.hm.com/content/dam/global_campaigns/season_02/kids/start-page-assets/w39-40/KS42B1-2x3-kids-start-page-VIDEO-wk39-40.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              controls={false}
+              disablePictureInPicture
+              controlsList="nodownload noremoteplayback noplaybackrate"
+            />
+          </div>
 
-    {/* Add new two-image layout below video */}
-    <div className="kids-banner">
-      <div className="kids-block">
-        <h3 className="kids-heading">NEW ARRIVALS</h3>
-        <img
-          src="https://image.hm.com/content/dam/global_campaigns/season_02/kids/start-page-assets/wk41/Newborn-KCE-wk41-43.jpg?imwidth=1536"
-          alt="Kids New Arrivals"
-          className="kids-img"
-        />
-      </div>
+          <div className="kids-banner">
+            <div className="kids-block">
+              <h3 className="kids-heading">NEW ARRIVALS</h3>
+              <img
+                src="https://image.hm.com/content/dam/global_campaigns/season_02/kids/start-page-assets/wk41/Newborn-KCE-wk41-43.jpg?imwidth=1536"
+                alt="Kids New Arrivals"
+                className="kids-img"
+              />
+            </div>
 
-      <div className="kids-block">
-        <h3 className="kids-heading link">SHOP NOW</h3>
-        <img
-          src="https://image.hm.com/content/dam/global_campaigns/season_02/kids/start-page-assets/wk41/KS42G-4x5-kids-wk41-42.jpg?imwidth=1366"
-          alt="Kids Shop Now"
-          className="kids-img"
-        />
-      </div>
-    </div>
-  </>
-)}
-
+            <div className="kids-block">
+              <h3 className="kids-heading link">SHOP NOW</h3>
+              <img
+                src="https://image.hm.com/content/dam/global_campaigns/season_02/kids/start-page-assets/wk41/KS42G-4x5-kids-wk41-42.jpg?imwidth=1366"
+                alt="Kids Shop Now"
+                className="kids-img"
+              />
+            </div>
+          </div>
+        </>
+      )}
 
       {/* --- PRODUCTS GRID --- */}
-      {loading ? (
-        <p>Loading...</p>
-      ) : products.length > 0 ? (
-        <div className="products-grid">
-          {products.map((p) => (
-            <ProductCard key={p.id || p._id} product={p} />
-          ))}
+      <div className="category-products">
+        {/* 🆕 Sort dropdown */}
+        <div className="sort-section">
+          <label htmlFor="sort">Sort by:</label>
+          <select
+            id="sort"
+            className="sort-dropdown"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="default">Default</option>
+            <option value="highToLow">Price: High to Low</option>
+            <option value="lowToHigh">Price: Low to High</option>
+          </select>
         </div>
-      ) : (
-        <p>No products found in this category.</p>
-      )}
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : sortedProducts.length > 0 ? (
+          <div className="products-grid">
+            {sortedProducts.map((p) => (
+              <ProductCard key={p.id || p._id} product={p} />
+            ))}
+          </div>
+        ) : (
+          <p>No products found in this category.</p>
+        )}
+      </div>
     </div>
   );
 };
