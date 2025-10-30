@@ -9,4 +9,7 @@ urlpatterns = [
     path('products/add/', views.add_product),
     path('products/update/<int:pk>/', views.update_product),
     path('products/delete/<int:pk>/', views.delete_product),
+    path('wishlist/', views.get_wishlist),        # GET - view wishlist
+path('wishlist/add/', views.add_to_wishlist), # POST - add to wishlist
+
 ]
