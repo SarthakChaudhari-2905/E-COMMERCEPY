@@ -1,22 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ProductCard.css";
+import { FaHeart, FaRegHeart } from "react-icons/fa"; // ❤️ icons
+import api from "../services/api";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product, onAddToCart }) => {
-  // product: { id, name, price, image, category, description }
-  const { id, name, price, image, category } = product; // ✅ changed _id → id
+  const { id, name, price, image, category } = product;
+  const [wishlisted, setWishlisted] = useState(false);
 
   const handleAdd = (e) => {
     e.preventDefault();
     if (onAddToCart) onAddToCart(product);
   };
 
+  // ❤️ Handle Wishlist Click
+  const handleWishlist = async (e) => {
+    e.preventDefault();
+
+    try {
+      await api.post("/wishlist/add/", { product: id });
+
+      setWishlisted(true);
+      toast.success(`${name} added to wishlist ❤️`);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+      toast.error("Failed to add to wishlist ❌");
+    }
+  };
+
   return (
     <article className="product-card" aria-label={name}>
-      {/* ✅ changed _id → id in all links */}
       <Link to={`/product/${id}`} className="img-link">
         <div className="product-image-wrap">
           <img src={image} alt={name} className="product-image" />
+
+          {/* ❤️ Wishlist Icon */}
+          <div className="wishlist-icon" onClick={handleWishlist}>
+            {wishlisted ? (
+              <FaHeart color="red" size={22} />
+            ) : (
+              <FaRegHeart color="gray" size={22} />
+            )}
+          </div>
+
           <div className="badge">{category?.toUpperCase()}</div>
         </div>
       </Link>
