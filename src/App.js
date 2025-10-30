@@ -14,6 +14,10 @@ import AdminPanel from "./pages/AdminPanel";
 import { CartProvider } from "./pages/Context/CartContext";
 import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoryPage";
+import Wishlist from "./pages/Wishlist";
+
+
+
 
 function App() {
   return (
@@ -28,6 +32,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/about" element={<About />} />
+              <Route path="/wishlist" element={<Wishlist />} />
 
               {/* Product and category pages */}
               <Route path="/category/:category" element={<CategoryPage />} />
