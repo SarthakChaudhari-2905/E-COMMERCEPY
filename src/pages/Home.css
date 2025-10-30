@@ -111,3 +111,17 @@
 .home-header { text-align: left; margin-bottom: 1rem; }
 .home-title { font-size: 28px; letter-spacing: 1px; }
 .home-subtitle { color: #6b7280; margin-top: 6px; }
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sort-dropdown {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+}
