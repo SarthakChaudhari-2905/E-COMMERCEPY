@@ -1,9 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { CartContext } from "./Context/CartContext";
-import api from "../services/api"; // ✅ use api.js
+import api from "../services/api";
 import "./ProductDetails.css";
 import { toast } from "react-toastify";
+import { FaHeart, FaRegHeart } from "react-icons/fa"; // ❤️ icons
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,12 +13,13 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [isWishlisted, setIsWishlisted] = useState(false); // 💖 wishlist state
 
-  // Fetch product from Django backend
+  // Fetch product details
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await api.get(`/products/${id}/`); // ✅ endpoint matches Django
+        const res = await api.get(`/products/${id}/`);
         setProduct(res.data);
       } catch (err) {
         console.error("Error fetching product:", err.response?.data || err.message);
@@ -33,7 +35,7 @@ const ProductDetails = () => {
   if (loading) return <p style={{ padding: "2rem" }}>Loading product...</p>;
   if (!product) return <p style={{ padding: "2rem" }}>Product not found.</p>;
 
-  // ✅ Handle Add to Cart with toast
+  // 🛒 Add to cart
   const handleAddToCart = () => {
     if (!selectedSize) {
       toast.error("Please select a size before adding to cart ❌");
@@ -50,9 +52,42 @@ const ProductDetails = () => {
     toast.success("Item added to cart 🛒✅");
   };
 
+  // 💖 Add to wishlist
+  const handleWishlist = async () => {
+    try {
+      const res = await api.post(
+        "/wishlist/add/",
+        { product: product.id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (res.status === 201) {
+        setIsWishlisted(true);
+        toast.success("Added to wishlist 💖");
+      } else if (res.status === 200) {
+        toast.info("Already in wishlist 💕");
+      }
+    } catch (err) {
+      console.error("Wishlist error:", err.response?.data || err.message);
+      toast.error("Failed to add to wishlist ❌");
+    }
+  };
+
   return (
     <div className="product-details">
       <div className="details-left">
+        <div className="wishlist-icon" onClick={handleWishlist}>
+          {isWishlisted ? (
+            <FaHeart color="red" size={28} />
+          ) : (
+            <FaRegHeart color="#555" size={28} />
+          )}
+        </div>
+
         <img
           src={product.image}
           alt={product.name}
