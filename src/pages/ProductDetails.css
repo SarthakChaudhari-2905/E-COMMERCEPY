@@ -126,3 +126,22 @@
   font-weight: bold;
   margin: 10px 0;
 }
+/* ❤️ Wishlist Icon */
+.wishlist-icon {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: white;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.wishlist-icon:hover {
+  transform: scale(1.15);
+}
+
+
